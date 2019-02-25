@@ -2,6 +2,7 @@ extends TileMap
 
 var selected = false
 var playersTurn = true
+var moving = false
 
 func _ready():
 	pass
@@ -14,6 +15,12 @@ func IsSelected():
 
 func SetSelected(value):
 	selected = value
+	
+func IsMoving():
+	return moving
+
+func SetMoving(value):
+	moving = value
 
 func PlayersTurn():
 	return playersTurn

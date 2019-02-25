@@ -3,7 +3,6 @@ extends Node2D
 var color = 0 #0 - white 1 - black
 const blackRect = Rect2(490, 0, 474, 680)
 const whiteRect = Rect2(0, 0, 474, 680)
-var moving = false
 
 signal clicked(PawnName)
 signal animationFinished
@@ -28,7 +27,7 @@ func _process(delta):
 	
 func MoveTo(newPos):
 	$AnimationPlayer.current_animation = "Move"
-	if moving:
+	if get_node("/root/Game/Board").IsMoving():
 		return
 	$Tween.interpolate_property(self, "position", position, newPos, $AnimationPlayer.current_animation_length, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN)
 	if not $Tween.is_active():
@@ -41,6 +40,8 @@ func _on_Area2D_input_event(viewport, event, shape_idx):
 
 
 func Clicked():
+	if get_node("/root/Game/Board").IsMoving():
+		return
 	emit_signal("clicked", name)
 	#if not get_tree().get_root().find_node("Board", true, false).IsSelected(): #check if something selected
 	#	Select()
@@ -56,8 +57,8 @@ func UnSelect():
 	$Area2D/CollisionShape2D.set_scale($Area2D/CollisionShape2D.scale / 1.5)
 
 func _on_Tween_tween_started(object, key):
-	moving = true
+	get_node("/root/Game/Board").SetMoving(true)
 
 func _on_Tween_tween_completed(object, key):
-	moving = false
+	get_node("/root/Game/Board").SetMoving(false)
 	emit_signal("animationFinished")
