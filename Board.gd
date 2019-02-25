@@ -17,3 +17,10 @@ func SetSelected(value):
 
 func PlayersTurn():
 	return playersTurn
+
+func SetPlayersTurn(value):
+	playersTurn = value
+	if playersTurn:
+		get_tree().root.find_node("Turn", true, false).text = "Whites's Turn"
+	else:
+		get_tree().root.find_node("Turn", true, false).text = "Black's Turn"

@@ -14,17 +14,25 @@ func _ready():
 func _process(delta):
 	pass
 
+func getSelectedPawnNode(PawnNodeName):
+	return find_node(PawnNodeName, true, false)
 
 func PawnClicked(PawnName):
+	#check for turn
 	if get_parent().PlayersTurn():
 		return
+		
+	#select or unselect pawn
 	if selectedPawn != "none" and selectedPawn == PawnName:
-		find_node(selectedPawn, true, false).UnSelect()
+		getSelectedPawnNode(selectedPawn).UnSelect()
 		get_parent().SetSelected(false)
 		selectedPawn = "none"
-		return
+		return #exit if we unselected
 	if selectedPawn != "none":
-		find_node(selectedPawn, true, false).UnSelect()
+		getSelectedPawnNode(selectedPawn).UnSelect()
 	find_node(PawnName, true, false).Select()
 	selectedPawn = PawnName
 	get_parent().SetSelected(true)
+	
+	#highlight possible moves
+	get_parent().GetPossibleTurns(getSelectedPawnNode(selectedPawn).position)
