@@ -14,7 +14,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func getSelectedPawnNode(PawnNodeName):
+func getPawnNode(PawnNodeName):
 	return find_node(PawnNodeName, true, false)
 
 func PawnClicked(PawnName):
@@ -24,15 +24,25 @@ func PawnClicked(PawnName):
 		
 	#select or unselect pawn
 	if selectedPawn != "none" and selectedPawn == PawnName:
-		getSelectedPawnNode(selectedPawn).UnSelect()
+		getPawnNode(selectedPawn).UnSelect()
 		get_parent().SetSelected(false)
 		selectedPawn = "none"
+		get_node("/root/Game/Board").ClearDots()
 		return #exit if we unselected
 	if selectedPawn != "none":
-		getSelectedPawnNode(selectedPawn).UnSelect()
+		getPawnNode(selectedPawn).UnSelect()
+		get_node("/root/Game/Board").ClearDots()
 	find_node(PawnName, true, false).Select()
 	selectedPawn = PawnName
 	get_parent().SetSelected(true)
 	
 	#highlight possible moves
-	get_tree().root.find_node("Game", true, false).GetPossibleTurns(getSelectedPawnNode(selectedPawn).position)
+	get_tree().root.find_node("Game", true, false).GetPossibleTurns(getPawnNode(selectedPawn).position)
+
+func MovePawn(NewPos):
+	var pawn = getPawnNode(selectedPawn)
+	pawn.MoveTo(NewPos)
+	pawn.UnSelect()
+	selectedPawn = "none"
+	get_parent().SetSelected(false)
+	get_node("/root/Game/Board").ClearDots()

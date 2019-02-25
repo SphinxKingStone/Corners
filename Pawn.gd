@@ -6,6 +6,7 @@ const whiteRect = Rect2(0, 0, 474, 680)
 var moving = false
 
 signal clicked(PawnName)
+signal animationFinished
 
 func _ready():
 	color = 0
@@ -57,6 +58,6 @@ func UnSelect():
 func _on_Tween_tween_started(object, key):
 	moving = true
 
-
 func _on_Tween_tween_completed(object, key):
 	moving = false
+	emit_signal("animationFinished")
