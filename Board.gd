@@ -3,6 +3,9 @@ extends TileMap
 var selected = false
 var playersTurn = true
 var moving = false
+var firstMove = true
+
+signal moveFinished
 
 func _ready():
 	pass
@@ -22,13 +25,14 @@ func IsMoving():
 func SetMoving(value):
 	moving = value
 
-func PlayersTurn():
+func IsPlayersTurn():
 	return playersTurn
 
 func SetPlayersTurn(value):
 	playersTurn = value
+	emit_signal("moveFinished")
 	if playersTurn:
-		get_tree().root.find_node("Turn", true, false).text = "Whites's Turn"
+		get_tree().root.find_node("Turn", true, false).text = "White's Turn"
 	else:
 		get_tree().root.find_node("Turn", true, false).text = "Black's Turn"
 
@@ -39,8 +43,6 @@ func MovePawn(NewPos):
 		$Enemy.MovePawn(NewPos)
 
 func DrawDot(pos):
-	if pos.x < 0 or pos.x > 512 or pos.y < 0 or pos.y > 512:
-		return
 	var dotScene = load("res://Dot.tscn")
 	var dot = dotScene.instance()
 	add_child(dot)
@@ -52,3 +54,13 @@ func ClearDots():
 	for i in get_children():
 		if "Dot" in i.get_name():
 			i.queue_free()
+
+
+func _on_Enemy_MoveFinished():
+#	firstMove = false
+	SetPlayersTurn(true)
+
+
+func _on_Player_MoveFinished():
+#	firstMove = false
+	SetPlayersTurn(false)

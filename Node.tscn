@@ -32,7 +32,28 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Rect" ]
 
-[node name="Board" type="TileMap" parent="." index="1"]
+[node name="TurnCounter" type="Label" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 520.0
+margin_top = 20.0
+margin_right = 560.0
+margin_bottom = 34.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+text = "Turn: "
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Board" type="TileMap" parent="." index="2"]
 
 mode = 0
 tile_set = ExtResource( 2 )
@@ -153,5 +174,11 @@ _sections_unfolded = [ "Pause", "Transform" ]
 
 position = Vector2( 480, 480 )
 _sections_unfolded = [ "Pause", "Transform" ]
+
+[connection signal="moveFinished" from="Board" to="." method="_on_Board_moveFinished"]
+
+[connection signal="MoveFinished" from="Board/Enemy" to="Board" method="_on_Enemy_MoveFinished"]
+
+[connection signal="MoveFinished" from="Board/Player" to="Board" method="_on_Player_MoveFinished"]
 
 

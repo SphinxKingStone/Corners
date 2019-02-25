@@ -6,6 +6,8 @@ extends Node
 
 var selectedPawn = "none"
 
+signal MoveFinished
+
 func _ready():
 	for pawn in get_children():
 		pawn.SetColor(0)
@@ -19,7 +21,7 @@ func getPawnNode(PawnNodeName):
 
 func PawnClicked(PawnName):
 	#check for turn
-	if not get_parent().PlayersTurn():
+	if not get_parent().IsPlayersTurn():
 		return
 		
 	#select or unselect pawn
@@ -37,12 +39,15 @@ func PawnClicked(PawnName):
 	get_parent().SetSelected(true)
 	
 	#highlight possible moves
-	get_tree().root.find_node("Game", true, false).GetPossibleTurns(getPawnNode(selectedPawn).position)
+	get_node("/root/Game").GetPossibleTurns(getPawnNode(selectedPawn).position)
+	
 
 func MovePawn(NewPos):
 	var pawn = getPawnNode(selectedPawn)
 	pawn.MoveTo(NewPos)
-	pawn.UnSelect()
+	emit_signal("MoveFinished")
+	
 	selectedPawn = "none"
+	pawn.UnSelect()
 	get_parent().SetSelected(false)
 	get_node("/root/Game/Board").ClearDots()

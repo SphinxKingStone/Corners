@@ -29,7 +29,7 @@ func MoveTo(newPos):
 	$AnimationPlayer.current_animation = "Move"
 	if get_node("/root/Game/Board").IsMoving():
 		return
-	$Tween.interpolate_property(self, "position", position, newPos, $AnimationPlayer.current_animation_length, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN)
+	$Tween.interpolate_property(self, "position", position, newPos, $AnimationPlayer.current_animation_length / 2, Tween.TRANS_LINEAR, Tween.EASE_OUT_IN)
 	if not $Tween.is_active():
 		$Tween.start()
 
